@@ -6,13 +6,71 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFC2E475E5F003CD108 /* onnxruntime */; };
+		14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1485349D2E4CA9FD004E4440 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14A6F5372E477194003CD108 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		140626412E43325B00B1288E /* AICompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AICompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14A6EEE82E470E6F003CD108 /* AICompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AICompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		140626512E433BE800B1288E /* Exceptions for "AICompanion" folder in "AICompanion" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				"ML Models/Kokoro TTS Model/dict",
+				"ML Models/Kokoro TTS Model/espeak-ng-data",
+			);
+			target = 140626402E43325B00B1288E /* AICompanion */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		148534C82E4CC642004E4440 /* Exceptions for "AICompanion" folder in "Copy Files" phase from "AICompanion" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 14A6F5372E477194003CD108 /* CopyFiles */;
+			membershipExceptions = (
+				"ML Models/Kokoro TTS Model/dict",
+				"ML Models/Kokoro TTS Model/espeak-ng-data",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		140626432E43325B00B1288E /* AICompanion */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				140626512E433BE800B1288E /* Exceptions for "AICompanion" folder in "AICompanion" target */,
+				148534C82E4CC642004E4440 /* Exceptions for "AICompanion" folder in "Copy Files" phase from "AICompanion" target */,
+			);
+			explicitFolders = (
+				"ML Models/Kokoro TTS Model/dict",
+				"ML Models/Kokoro TTS Model/espeak-ng-data",
+			);
 			path = AICompanion;
 			sourceTree = "<group>";
 		};
@@ -23,6 +81,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */,
+				14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,16 +93,16 @@
 			isa = PBXGroup;
 			children = (
 				140626432E43325B00B1288E /* AICompanion */,
-				140626422E43325B00B1288E /* Products */,
+				14A6EEE62E470CFF003CD108 /* Frameworks */,
+				14A6EEE82E470E6F003CD108 /* AICompanion.app */,
 			);
 			sourceTree = "<group>";
 		};
-		140626422E43325B00B1288E /* Products */ = {
+		14A6EEE62E470CFF003CD108 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				140626412E43325B00B1288E /* AICompanion.app */,
 			);
-			name = Products;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,6 +115,8 @@
 				1406263D2E43325B00B1288E /* Sources */,
 				1406263E2E43325B00B1288E /* Frameworks */,
 				1406263F2E43325B00B1288E /* Resources */,
+				14A6F5372E477194003CD108 /* CopyFiles */,
+				1485349D2E4CA9FD004E4440 /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -65,9 +127,11 @@
 			);
 			name = AICompanion;
 			packageProductDependencies = (
+				14A6EEFC2E475E5F003CD108 /* onnxruntime */,
+				14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */,
 			);
 			productName = AICompanion;
-			productReference = 140626412E43325B00B1288E /* AICompanion.app */;
+			productReference = 14A6EEE82E470E6F003CD108 /* AICompanion.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -82,6 +146,7 @@
 				TargetAttributes = {
 					140626402E43325B00B1288E = {
 						CreatedOnToolsVersion = 16.4;
+						LastSwiftMigration = 1640;
 					};
 				};
 			};
@@ -94,8 +159,11 @@
 			);
 			mainGroup = 140626382E43325B00B1288E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 140626422E43325B00B1288E /* Products */;
+			productRefGroup = 140626382E43325B00B1288E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -250,6 +318,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -257,17 +326,30 @@
 				DEVELOPMENT_TEAM = J6JLB9Z7C9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AICompanion/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WaifuGPT;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to speech recognition to convert your voice into text.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = Barrys.AICompanion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AICompanion/AICompanion-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -277,6 +359,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -284,17 +367,29 @@
 				DEVELOPMENT_TEAM = J6JLB9Z7C9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AICompanion/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WaifuGPT;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to speech recognition to convert your voice into text.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = Barrys.AICompanion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AICompanion/AICompanion-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -321,6 +416,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		14A6EEFC2E475E5F003CD108 /* onnxruntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime;
+		};
+		14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime_extensions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 140626392E43325B00B1288E /* Project object */;
 }

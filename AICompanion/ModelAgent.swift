@@ -12,29 +12,34 @@ class ModelAgent: ObservableObject {
     
     private var behaviourDirector: BehaviourDirector?
     private var listenerDirector: ListenerDirector?
+    private var llmDirector: LLMDirector?
+    
+    private var sentenceCoordinator: DataCoordinator<String> = DataCoordinator()
     
     @Published var isLoading: Bool = false
     @Published var errorMessage: String = ""
-    @Published var infoMessage: String = ""
+    
+    @Published var ttsFinishedLoading = false
+    @Published var llmFinishedLoading = false
     
     func setEntity(_ entity: ModelEntity) {
-        isLoading = true
         self.behaviourDirector = BehaviourDirector(
             animations: .init(entity: entity,
                               skeletal: .init(entity: entity),
                               eyes: .init(entity: entity),
                               mouth: .init(entity: entity,
                                            syllablesCounter: .init())),
-            speech: .init(ttsDirector:
+            speech: .init(tts:
                             TTSDirector(initCompletion: {
-                                self.isLoading = false
+                                self.ttsFinishedLoading = true
                             }),
-                          audio: .init(),
-                          sanitizer: .init()),
+                          audio: .init()),
             emotions: .init())
         self.listenerDirector = .init()
+        self.llmDirector = .init(sanitizer: StringSanitizer())
         self.behaviourDirector?.delegate = self
         self.listenerDirector?.delegate = self
+        self.llmDirector?.delegate = self
         self.behaviourDirector?.startStateBehaviour()
         //self.behaviourDirector?.testAllSkeletalAnimations()
         //self.behaviourDirector?.testAllEyesAnimations()
@@ -44,7 +49,9 @@ class ModelAgent: ObservableObject {
     
     func receiveText(input: String) {
         isLoading = true
-        behaviourDirector?.startTalking(text: input)
+        sentenceCoordinator = DataCoordinator()
+        behaviourDirector?.startTalking(sentenceCoordinator: sentenceCoordinator)
+        llmDirector?.generate(prompt: input)
     }
     
     func requestSpeechAuthorization(completion: (()->Void)? = nil) {
@@ -56,6 +63,7 @@ class ModelAgent: ObservableObject {
     }
     
     func stop() {
+        llmDirector?.stop()
         listenerDirector?.stopListening()
         behaviourDirector?.stopTalking()
         isLoading = false
@@ -74,16 +82,6 @@ class ModelAgent: ObservableObject {
 
 extension ModelAgent: @preconcurrency BehaviourDirectorDelegate {
     
-    func errorMessage(text: String) {
-        receiveError(text: text)
-    }
-    
-    func startLoading() {
-        DispatchQueue.main.async { [weak self] in
-            self?.isLoading = true
-        }
-    }
-    
     func finishLoading() {
         DispatchQueue.main.async { [weak self] in
             self?.isLoading = false
@@ -95,12 +93,32 @@ extension ModelAgent: @preconcurrency BehaviourDirectorDelegate {
 extension ModelAgent: @preconcurrency ListenerDirectorDelegate {
     
     func didDetectSentence(_ text: String) {
-        isLoading = true
-        behaviourDirector?.startTalking(text: text)
+        receiveText(input: text)
     }
     
     func errorMessage(_ text: String) {
         receiveError(text: text)
     }
         
+}
+
+extension ModelAgent: @preconcurrency LLMDirectorDelegate {
+    func didFinishLoadingModel() {
+        self.llmFinishedLoading = true
+    }
+    
+    func sentencesFormed(_ sentences: [String]) {
+        /*
+        for sentence in sentences {
+            if !sentence.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                sentenceCoordinator.addData(sentence)
+            }
+        }
+         */
+        sentenceCoordinator.addData(sentences.joined(separator: ". "))
+    }
+    
+    func generationFinished() {
+        sentenceCoordinator.finish()
+    }
 }

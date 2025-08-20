@@ -22,6 +22,8 @@ struct ContentView: View {
                     }
                     if !agent.errorMessage.isEmpty {
                         Text(agent.errorMessage)
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
                             .foregroundStyle(.black)
                             .padding()
                     }

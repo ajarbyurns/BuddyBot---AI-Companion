@@ -22,7 +22,7 @@ class AudioDirector {
     
     private var playAudioTask: Task<Void, Never>?
     weak var delegate: AudioDirectorDelegate?
-        
+            
     init(sampleRate: Double = 24000, channels: UInt32 = 1) {
         self.sampleRate = sampleRate
         self.channels = channels
@@ -51,16 +51,20 @@ class AudioDirector {
         }
     }
     
-    func waitAndPlayAudio(_ coordinator: DataCoordinator) {
+    func waitAndPlayAudio(_ coordinator: DataCoordinator<(String, [Float])>) {
         playAudioTask?.cancel()
         playAudioTask = Task {
             for await (text, frames) in coordinator.buffer {
+                guard !Task.isCancelled else { return }
                 if let pcmBuffer = await getPCMBuffer(samples: frames) {
                     await playAudio(text: text,
                                     duration: Double(frames.count)/sampleRate,
-                                    pcmBuffer: pcmBuffer,
-                                    isLastFrame: coordinator.isFinished)
+                                    pcmBuffer: pcmBuffer)
                 }
+            }
+            Task { @MainActor in
+                stop()
+                delegate?.didFinishPlayingAllBuffers()
             }
         }
     }
@@ -71,7 +75,7 @@ class AudioDirector {
         guard let pcmBuffer = AVAudioPCMBuffer(
             pcmFormat: self.audioFormat,
             frameCapacity: frameCapacity) else {
-            await MainActor.run {
+            Task { @MainActor in
                 delegate?.foundError("Failed to create AVAudioPCMBuffer.")
             }
             return nil
@@ -84,7 +88,7 @@ class AudioDirector {
                 }
             }
         } else {
-            await MainActor.run {
+            Task { @MainActor in
                 delegate?.foundError("Failed to access pcm buffer data.")
             }
             return nil
@@ -95,12 +99,26 @@ class AudioDirector {
         return pcmBuffer
     }
     
-    private func playAudio(text: String, duration: Double, pcmBuffer: AVAudioPCMBuffer, isLastFrame: Bool) async {
+    private func playAudio(text: String,
+                           duration: Double,
+                           pcmBuffer: AVAudioPCMBuffer,
+                           delay: Double = 0.25) async {
 
         guard audioEngine.isRunning else { return }
         
-        await MainActor.run {
-            self.delegate?.willStartTalking(text, duration)
+        Task { @MainActor in
+            delegate?.willStartTalking(text, duration)
+        }
+        
+        let lastRenderTime = playerNode.lastRenderTime
+        var startTime: AVAudioTime? = nil
+
+        if let lastRenderTime,
+           let playerTime = playerNode.playerTime(forNodeTime: lastRenderTime) {
+            let previousAudioEndTimeInSamples = playerTime.sampleTime
+            let delayInSamples = AVAudioFramePosition(delay * sampleRate)
+            let newAudioStartTimeInSamples = previousAudioEndTimeInSamples + delayInSamples
+            startTime = AVAudioTime(sampleTime: newAudioStartTimeInSamples, atRate: sampleRate)
         }
         
         if !playerNode.isPlaying {
@@ -108,12 +126,7 @@ class AudioDirector {
         }
         
         await withCheckedContinuation { continuation in
-            playerNode.scheduleBuffer(pcmBuffer, at: nil, options: .interrupts, completionHandler: { [weak self] in
-                if isLastFrame {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.delegate?.didFinishPlayingAllBuffers()
-                    }
-                }
+            self.playerNode.scheduleBuffer(pcmBuffer, at: startTime, options: .interrupts, completionHandler: {
                 continuation.resume()
             })
         }

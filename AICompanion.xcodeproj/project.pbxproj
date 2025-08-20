@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFC2E475E5F003CD108 /* onnxruntime */; };
 		14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */; };
+		14C756752E54B99C00BCCE5E /* Kuzco in Frameworks */ = {isa = PBXBuildFile; productRef = 14C756742E54B99C00BCCE5E /* Kuzco */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1485DF752E53674800F9FEFE /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		1485DF772E53675700F9FEFE /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		14A6EEE82E470E6F003CD108 /* AICompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AICompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -82,6 +85,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */,
+				14C756752E54B99C00BCCE5E /* Kuzco in Frameworks */,
 				14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +105,8 @@
 		14A6EEE62E470CFF003CD108 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1485DF772E53675700F9FEFE /* Accelerate.framework */,
+				1485DF752E53674800F9FEFE /* Metal.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -129,6 +135,7 @@
 			packageProductDependencies = (
 				14A6EEFC2E475E5F003CD108 /* onnxruntime */,
 				14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */,
+				14C756742E54B99C00BCCE5E /* Kuzco */,
 			);
 			productName = AICompanion;
 			productReference = 14A6EEE82E470E6F003CD108 /* AICompanion.app */;
@@ -161,6 +168,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
+				14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 140626382E43325B00B1288E;
@@ -318,6 +326,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -328,8 +337,9 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = AICompanion/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WaifuGPT;
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Companion";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
@@ -359,6 +369,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -369,8 +380,9 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = AICompanion/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WaifuGPT;
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Companion";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
@@ -426,6 +438,14 @@
 				minimumVersion = 1.20.0;
 			};
 		};
+		14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jaredcassoutt/Kuzco";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -438,6 +458,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
 			productName = onnxruntime_extensions;
+		};
+		14C756742E54B99C00BCCE5E /* Kuzco */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */;
+			productName = Kuzco;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

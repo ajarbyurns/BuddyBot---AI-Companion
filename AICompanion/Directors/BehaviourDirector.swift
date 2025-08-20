@@ -16,8 +16,7 @@ enum BehaviourState {
 }
 
 protocol BehaviourDirectorDelegate: AnyObject {
-    func errorMessage(text: String)
-    func startLoading()
+    func errorMessage(_ text: String)
     func finishLoading()
 }
 
@@ -107,7 +106,7 @@ final class BehaviourDirector {
     func thinking() {
         currentTask = Task {
             guard !Task.isCancelled else { return }
-            await animationsDirector.playActionWithDuration(s: .thinking, time: 4.0)
+            await animationsDirector.playActionWithDuration(s: .thinking, time: 5.0)
             guard !Task.isCancelled else { return }
             await animationsDirector.playActionWithDuration(s: .idle, time: 3.0)
             guard !Task.isCancelled else { return }
@@ -195,9 +194,9 @@ final class BehaviourDirector {
         }
     }
     
-    func startTalking(text: String) {
+    func startTalking(sentenceCoordinator: DataCoordinator<String>) {
         enterState(.thinking)
-        speechDirector.startTalking(text: text)
+        speechDirector.startTalking(sentenceCoordinator: sentenceCoordinator)
     }
     
     func stopTalking() {
@@ -230,7 +229,7 @@ extension BehaviourDirector: SpeechDirectorDelegate {
     }
     
     func foundError(_ text: String) {
-        delegate?.errorMessage(text: text)
+        delegate?.errorMessage(text)
     }
     
 }

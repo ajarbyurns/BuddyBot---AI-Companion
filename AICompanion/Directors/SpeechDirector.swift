@@ -16,98 +16,84 @@ protocol SpeechDirectorDelegate: AnyObject {
 
 class SpeechDirector: NSObject {
 
-    private var sentences: [String] = []
-    private var currentSentenceIndex = 0
     private var currentSentence = ""
     
-    var dataCoordinator: DataCoordinator = DataCoordinator()
-    let ttsDirector: TTSDirector
-    let audioDirector: AudioDirector
-    let stringSanitizer: StringSanitizer
+    private var audioCoordinator: DataCoordinator<(String, [Float])> = DataCoordinator()
+    private var continuation: CheckedContinuation<(), Never>?
+    
+    private let ttsDirector: TTSDirector
+    private let audioDirector: AudioDirector
+    
     weak var delegate: SpeechDirectorDelegate?
+    private var receiveStringTask: Task<Void, Error>?
+    private var isGeneratingTTS = false
     
     // MARK: Initialization
-    init(ttsDirector: TTSDirector,
-         audio: AudioDirector,
-         sanitizer: StringSanitizer) {
-        self.ttsDirector = ttsDirector
+    init(tts: TTSDirector,
+         audio: AudioDirector) {
+        self.ttsDirector = tts
         self.audioDirector = audio
-        self.stringSanitizer = sanitizer
         super.init()
         self.audioDirector.delegate = self
     }
     
     // MARK: Public API
-    func startTalking(text: String) {
+    func startTalking(sentenceCoordinator: DataCoordinator<String>) {
         guard let _ = ttsDirector.tts else {
-            delegate?.foundError("Text To Speech model not yet initialized. Please wait a while before trying again")
-            delegate?.didFinishTalking()
-            return
-        }
-        sentences = generateSentences(text: text)
-        currentSentenceIndex = 0
-        
-        guard sentences.count > 0 else {
+            delegate?.foundError("TTS model not yet initialized")
             delegate?.didFinishTalking()
             return
         }
         
-        dataCoordinator = DataCoordinator()
+        isGeneratingTTS = false
+        audioCoordinator = DataCoordinator()
         audioDirector.startAudio()
-        audioDirector.waitAndPlayAudio(dataCoordinator)
-        generateTTSArrays()
+        audioDirector.waitAndPlayAudio(audioCoordinator)
+        
+        receiveStringTask?.cancel()
+        receiveStringTask = Task {
+            for await sentence in sentenceCoordinator.buffer {
+                guard !Task.isCancelled else { return }
+                await generateTTSArray(sentence: sentence)
+            }
+            audioCoordinator.finish()
+        }
     }
     
     func stopTalking() {
-        dataCoordinator.finish()
+        receiveStringTask?.cancel()
+        audioCoordinator.finish()
         audioDirector.stop()
     }
     
-    private func generateSentences(text: String) -> [String] {
-        var results: [String] = []
-        let tokenizer = NLTokenizer(unit: .sentence)
-        let sanitizedText = stringSanitizer.preSanitize(text)
-        tokenizer.string = sanitizedText
+    private func generateTTSArray(sentence: String) async {
         
-        tokenizer.enumerateTokens(in: sanitizedText.startIndex..<sanitizedText.endIndex) { range, _ in
-            let sentence = String(sanitizedText[range])
-            let sanitizedSentence = stringSanitizer.postSanitize(sentence)
-            if !sanitizedSentence.isEmpty {
-                results.append(sanitizedSentence)
-            }
-            return true
-        }
-        
-        return results
-    }
-    
-    private func generateTTSArrays() {
-        guard currentSentenceIndex < sentences.count else {
-            dataCoordinator.finish()
-            return
-        }
-        
-        currentSentence = sentences[currentSentenceIndex]
-        let arg = Unmanaged<SpeechDirector>.passUnretained(self).toOpaque()
-        
-        let ttsCallback = generateTTSCallBack()
-        
-        DispatchQueue.global().async { [weak self] in
-            guard let self, let tts = self.ttsDirector.tts else {
-                print("Text to Speech Model is nil")
-                let _ = Unmanaged<SpeechDirector>.fromOpaque(arg).takeUnretainedValue()
-                return
-            }
+        await withCheckedContinuation { continuation in
             
-            let _ = tts.generateWithCallbackWithArg(
-                text: currentSentence,
-                callback: ttsCallback,
-                arg: arg,
-                sid: 3,
-                speed: 1
-            )
+            self.currentSentence = sentence
+            self.isGeneratingTTS = true
+            self.continuation = continuation
+            let arg = Unmanaged<SpeechDirector>.passUnretained(self).toOpaque()
+            
+            let ttsCallback = generateTTSCallBack()
+            
+            Task {
+                guard let tts = ttsDirector.tts else {
+                    print("Text to Speech Model is nil")
+                    let _ = Unmanaged<SpeechDirector>.fromOpaque(arg).takeUnretainedValue()
+                    continuation.resume()
+                    return
+                }
+                
+                let _ = tts.generateWithCallbackWithArg(
+                    text: currentSentence,
+                    callback: ttsCallback,
+                    arg: arg,
+                    sid: 3,
+                    speed: 1
+                )
+            }
         }
-        
     }
     
     private func generateTTSCallBack() -> TtsCallbackWithArg {
@@ -118,20 +104,25 @@ class SpeechDirector: NSObject {
                 return 0
             }
             
-            let o = Unmanaged<SpeechDirector>.fromOpaque(argPtr).takeUnretainedValue()
-
             guard let samplesPtr else {
                 print("Callback received nil samplesPtr")
                 return 0
             }
             
+            let o = Unmanaged<SpeechDirector>.fromOpaque(argPtr).takeUnretainedValue()
+            
             let samplesBuffer = UnsafeBufferPointer(start: samplesPtr, count: Int(nSamples))
             let savedSamples: [Float] = Array(samplesBuffer)
             
-            DispatchQueue.main.async {
-                o.dataCoordinator.addData((o.currentSentence, savedSamples))
-                o.currentSentenceIndex += 1
-                o.generateTTSArrays()
+            Task { @MainActor in
+                if !o.currentSentence.isEmpty {
+                    o.audioCoordinator.addData((o.currentSentence, savedSamples))
+                }
+                if o.isGeneratingTTS {
+                    o.continuation?.resume()
+                    o.continuation = nil
+                    o.isGeneratingTTS = false
+                }
             }
              
             return 1

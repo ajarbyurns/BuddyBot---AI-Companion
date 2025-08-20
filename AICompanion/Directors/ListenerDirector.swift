@@ -27,7 +27,7 @@ class ListenerDirector {
     
     init() {
         audioEngine = AVAudioEngine()
-        speechRecognizer = SFSpeechRecognizer(locale: .init(identifier: "en-US"))
+        speechRecognizer = SFSpeechRecognizer(locale: .init(identifier: "en_US"))
     }
     
     func requestAuthorization(completion: (()->Void)? = nil) {
@@ -102,8 +102,10 @@ class ListenerDirector {
     
     @objc private func didFinishTalking() {
         if !inputComplete {
-            self.stopListening()
-            self.delegate?.didDetectSentence(transcription)
+            Task { @MainActor in
+                self.stopListening()
+                self.delegate?.didDetectSentence(transcription)
+            }
         }
     }
     

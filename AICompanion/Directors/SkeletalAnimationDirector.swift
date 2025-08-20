@@ -34,20 +34,20 @@ class SkeletalAnimationDirector {
         }
                 
         var actionsTimeSlot: [String: (Int, Int)] = [:]
-        actionsTimeSlot["Idle"] = (43, 542)
+        actionsTimeSlot["Idle"] = (43, 542) //21 seconds
         //actionsTimeSlot["Idle 2"] = (589, 989)
-        actionsTimeSlot["Surprised 1"] = (1061, 1181)
-        actionsTimeSlot["Surprised 2"] = (1239, 1349)
+        actionsTimeSlot["Surprised 1"] = (1061, 1181) //5 seconds
+        actionsTimeSlot["Surprised 2"] = (1239, 1349) //4.5 seconds
         //actionsTimeSlot["Talking 1"] = (1403, 2027)
-        actionsTimeSlot["Talking 1"] = (2096, 2274)
-        actionsTimeSlot["Talking 2"] = (2357, 2512)
-        actionsTimeSlot["Talking 3"] = (2619, 2927)
-        actionsTimeSlot["Angry"] = (4281, 4856)
+        actionsTimeSlot["Talking 1"] = (2096, 2274) //7.5 seconds
+        actionsTimeSlot["Talking 2"] = (2357, 2512) //6.5 seconds
+        actionsTimeSlot["Talking 3"] = (2619, 2927) //12.5 seconds
+        actionsTimeSlot["Angry"] = (4281, 4856) //24 seconds
         //actionsTimeSlot["Happy 1"] = (3011, 3311)
         //actionsTimeSlot["Happy 2"] = (3434, 3631)
         //actionsTimeSlot["Dancing 1"] = (3732, 3957)
-        actionsTimeSlot["Dancing"] = (4079, 4150)
-        actionsTimeSlot["Thinking"] = (5022, 5149)
+        actionsTimeSlot["Dancing"] = (4079, 4150) //3 seconds
+        actionsTimeSlot["Thinking"] = (5022, 5149) //5 seconds
         
         let fps = 24.0
         

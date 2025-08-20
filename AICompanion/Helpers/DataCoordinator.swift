@@ -6,21 +6,21 @@
 //
 import Foundation
 
-class DataCoordinator {
+class DataCoordinator<T> {
     
-    let buffer: AsyncStream<(String, [Float])>
-    private var continuation: AsyncStream<(String, [Float])>.Continuation?
+    let buffer: AsyncStream<T>
+    private var continuation: AsyncStream<T>.Continuation?
     var isFinished = false
     
     init() {
-        var localContinuation: AsyncStream<(String, [Float])>.Continuation?
+        var localContinuation: AsyncStream<T>.Continuation?
         buffer = AsyncStream { continuation in
             localContinuation = continuation
         }
         continuation = localContinuation
     }
 
-    func addData(_ item: (String, [Float])) {
+    func addData(_ item: T) {
         continuation?.yield(item)
     }
     

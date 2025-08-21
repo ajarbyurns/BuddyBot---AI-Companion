@@ -10,4 +10,9 @@ The app uses:
 5. [SyllableCounter](https://github.com/wfreitag/syllable-counter-swift)
 6. [VRoid model (exported to .usdz)](https://hub.vroid.com/en/characters/7939147878897061040/models/2292219474373673889)
 7. [Kuzco](https://github.com/jaredcassoutt/Kuzco)
+8. Apple's Speech Recognition
+9. Apple's Natural Language
+10. Apple's RealityKit
 
+The app can be downloaded [HERE](https://apps.apple.com/app/buddybot-ai-companion/id6751270165)
+Free of charge, and totally offline.

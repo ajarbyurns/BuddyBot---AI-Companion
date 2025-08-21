@@ -35,24 +35,36 @@ class ListenerDirector {
         
         switch status {
         case .undetermined:
-            delegate?.errorMessage("Microphone access denied.")
-        case .denied:
-            delegate?.errorMessage("Microphone access denied.")
-        case .granted:
-            SFSpeechRecognizer.requestAuthorization { authStatus in
+            AVAudioApplication.requestRecordPermission { granted in
                 DispatchQueue.main.async { [weak self] in
-                    switch authStatus {
-                    case .authorized:
-                        completion?()
-                    case .denied, .restricted, .notDetermined:
-                        self?.delegate?.errorMessage("Speech recognition not authorized")
-                    @unknown default:
-                        self?.delegate?.errorMessage("Unknown authorization status")
+                    if granted {
+                        self?.requestSpeechAuthorization(completion: completion)
+                    } else {
+                        self?.delegate?.errorMessage("Microphone access denied. Allow microphone usage in System Settings to use this feature")
                     }
                 }
             }
+        case .denied:
+            delegate?.errorMessage("Microphone access denied. Allow microphone usage in System Settings to use this feature")
+        case .granted:
+            requestSpeechAuthorization(completion: completion)
         @unknown default:
-            delegate?.errorMessage("Microphone access denied.")
+            delegate?.errorMessage("Microphone access denied. Allow Microphone usage in System Settings to use this feature")
+        }
+    }
+    
+    private func requestSpeechAuthorization(completion: (() -> Void)? = nil) {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            DispatchQueue.main.async { [weak self] in
+                switch authStatus {
+                case .authorized:
+                    completion?()
+                case .denied, .restricted, .notDetermined:
+                    self?.delegate?.errorMessage("Speech Recognition not authorized. Allow Speech Recognition in System Settings to use this feature")
+                @unknown default:
+                    self?.delegate?.errorMessage("Unknown Authorization status. Allow Speech Recognition in System Settings to use this feature")
+                }
+            }
         }
     }
     

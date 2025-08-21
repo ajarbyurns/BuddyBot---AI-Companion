@@ -7,22 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFC2E475E5F003CD108 /* onnxruntime */; };
-		14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */; };
-		14C756752E54B99C00BCCE5E /* Kuzco in Frameworks */ = {isa = PBXBuildFile; productRef = 14C756742E54B99C00BCCE5E /* Kuzco */; };
+		14D8D9FF2E55E2130036D6EB /* Kuzco in Frameworks */ = {isa = PBXBuildFile; productRef = 14D8D9FE2E55E2130036D6EB /* Kuzco */; };
+		14D8DA022E55E2690036D6EB /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 14D8DA012E55E2690036D6EB /* onnxruntime */; };
+		14D8DA042E55E2690036D6EB /* onnxruntime_extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 14D8DA032E55E2690036D6EB /* onnxruntime_extensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1485349D2E4CA9FD004E4440 /* Embed Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		14A6F5372E477194003CD108 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -84,9 +74,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14A6EEFD2E475E5F003CD108 /* onnxruntime in Frameworks */,
-				14C756752E54B99C00BCCE5E /* Kuzco in Frameworks */,
-				14A6EEFF2E475E5F003CD108 /* onnxruntime_extensions in Frameworks */,
+				14D8DA042E55E2690036D6EB /* onnxruntime_extensions in Frameworks */,
+				14D8DA022E55E2690036D6EB /* onnxruntime in Frameworks */,
+				14D8D9FF2E55E2130036D6EB /* Kuzco in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,7 +112,6 @@
 				1406263E2E43325B00B1288E /* Frameworks */,
 				1406263F2E43325B00B1288E /* Resources */,
 				14A6F5372E477194003CD108 /* CopyFiles */,
-				1485349D2E4CA9FD004E4440 /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -133,9 +122,9 @@
 			);
 			name = AICompanion;
 			packageProductDependencies = (
-				14A6EEFC2E475E5F003CD108 /* onnxruntime */,
-				14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */,
-				14C756742E54B99C00BCCE5E /* Kuzco */,
+				14D8D9FE2E55E2130036D6EB /* Kuzco */,
+				14D8DA012E55E2690036D6EB /* onnxruntime */,
+				14D8DA032E55E2690036D6EB /* onnxruntime_extensions */,
 			);
 			productName = AICompanion;
 			productReference = 14A6EEE82E470E6F003CD108 /* AICompanion.app */;
@@ -167,8 +156,8 @@
 			mainGroup = 140626382E43325B00B1288E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
-				14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */,
+				14D8D9FD2E55E2130036D6EB /* XCRemoteSwiftPackageReference "Kuzco" */,
+				14D8DA002E55E2690036D6EB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 140626382E43325B00B1288E;
@@ -326,12 +315,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = J6JLB9Z7C9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -342,8 +331,11 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "AI Companion";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your speech and convert it to text for chatbot interactions. Your audio is processed only to generate responses and is not stored";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to speech recognition to convert your voice into text.";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -351,16 +343,21 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AICompanion/Frameworks/ios-arm64",
+					"$(PROJECT_DIR)/AICompanion/Frameworks/ios-arm64_x86_64-simulator",
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = Barrys.AICompanion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "AICompanion/AICompanion-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -369,12 +366,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AICompanion/AICompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = J6JLB9Z7C9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -385,8 +382,11 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "AI Companion";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to the microphone to record your voice.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app requires microphone access to capture your speech and convert it to text for chatbot interactions. Your audio is processed only to generate responses and is not stored";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to speech recognition to convert your voice into text.";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -394,15 +394,20 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AICompanion/Frameworks/ios-arm64",
+					"$(PROJECT_DIR)/AICompanion/Frameworks/ios-arm64_x86_64-simulator",
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = Barrys.AICompanion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "AICompanion/AICompanion-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -430,15 +435,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.20.0;
-			};
-		};
-		14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */ = {
+		14D8D9FD2E55E2130036D6EB /* XCRemoteSwiftPackageReference "Kuzco" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jaredcassoutt/Kuzco";
 			requirement = {
@@ -446,23 +443,31 @@
 				kind = branch;
 			};
 		};
+		14D8DA002E55E2690036D6EB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		14A6EEFC2E475E5F003CD108 /* onnxruntime */ = {
+		14D8D9FE2E55E2130036D6EB /* Kuzco */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			package = 14D8D9FD2E55E2130036D6EB /* XCRemoteSwiftPackageReference "Kuzco" */;
+			productName = Kuzco;
+		};
+		14D8DA012E55E2690036D6EB /* onnxruntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14D8DA002E55E2690036D6EB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
 			productName = onnxruntime;
 		};
-		14A6EEFE2E475E5F003CD108 /* onnxruntime_extensions */ = {
+		14D8DA032E55E2690036D6EB /* onnxruntime_extensions */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 14A6EEFB2E475E5F003CD108 /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			package = 14D8DA002E55E2690036D6EB /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
 			productName = onnxruntime_extensions;
-		};
-		14C756742E54B99C00BCCE5E /* Kuzco */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14C756732E54B99C00BCCE5E /* XCRemoteSwiftPackageReference "Kuzco" */;
-			productName = Kuzco;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

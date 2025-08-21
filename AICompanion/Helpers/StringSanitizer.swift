@@ -38,7 +38,7 @@ class StringSanitizer {
         }
         
         let output = String(String.UnicodeScalarView(filteredScalars))
-            .replacingOccurrences(of: "\\s{2,}", with: ". ", options: .regularExpression)
+            .replacingOccurrences(of: "\\s{2,}", with: " ", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines)
         
         return output
@@ -52,30 +52,28 @@ class StringSanitizer {
         tokenizer.setLanguage(NLLanguage(rawValue: "en"))
         
         tokenizer.enumerateTokens(in: input.startIndex..<input.endIndex) { range, _ in
-            let token = String(input[range])
+            let token = String(input[range]).trimmingCharacters(in: .whitespacesAndNewlines)
             
-            if let number = Double(token.replacingOccurrences(of: ",", with: "")) {
+            if token.isEmpty {
+                result += " "
+            } else if let number = Double(token.replacingOccurrences(of: ",", with: "")) {
                 if let spelled = numberFormatter.string(from: NSNumber(value: number)) {
                     result += " " + spelled
                 } else {
                     result += " " + token
                 }
-            } else if token.rangeOfCharacter(from: CharacterSet.letters) != nil {
-                result += " " + token
-            } else if keepSet.contains(token) {
+            } else if token.count == 1, let ch = token.first, keepSet.contains(ch) {
                 result += token
-            } else if token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                result += " "
-            } else {
-                if let symbol = symbolWords[token] {
-                    result += " \(symbol)"
-                } else {
-                    result += ", "
-                }
+            } else if let symbol = symbolWords[token] {
+                result += " \(symbol)"
+            } else if token.rangeOfCharacter(from: CharacterSet.letters) != nil {
+                result += " \(token)"
             }
+            
             return true
         }
-        let collapsed = result.replacingOccurrences(of: "\\s{2,}", with: ". ", options: .regularExpression)
+        let collapsed = result
+            .replacingOccurrences(of: "\\s{2,}", with: " ", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines)
         
         return collapsed

@@ -5,7 +5,11 @@
 //  Created by Barry Juans on 06/08/25.
 //
 import SwiftUI
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
 
 struct ChatView: View {
     
@@ -166,6 +170,7 @@ struct ChatView: View {
     }
     
     func recalcHeight() {
+        #if os(macOS)
         let size = CGSize(width: (NSScreen.main?.frame.width ?? 300) - 100, height: .infinity)
         let attributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 17)
@@ -175,5 +180,18 @@ struct ChatView: View {
                                             attributes: attributes,
                                             context: nil)
         textHeight = min(max(50, boundingBox.height + 20), 300)
+        #else
+        let screenWidth = UIScreen.main.bounds.width
+        let size = CGSize(width: screenWidth - 100, height: CGFloat.greatestFiniteMagnitude)
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 17)
+        ]
+        let boundingBox = text.boundingRect(with: size,
+                                            options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                            attributes: attributes,
+                                            context: nil)
+        textHeight = min(max(50, boundingBox.height + 20), 300)
+        #endif
     }
 }

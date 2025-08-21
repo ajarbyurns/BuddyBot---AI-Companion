@@ -108,14 +108,9 @@ extension ModelAgent: @preconcurrency LLMDirectorDelegate {
     }
     
     func sentencesFormed(_ sentences: [String]) {
-        /*
-        for sentence in sentences {
-            if !sentence.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                sentenceCoordinator.addData(sentence)
-            }
+        if !sentences.joined().isEmpty {
+            sentenceCoordinator.addData(sentences.joined(separator: ". "))
         }
-         */
-        sentenceCoordinator.addData(sentences.joined(separator: ". "))
     }
     
     func generationFinished() {

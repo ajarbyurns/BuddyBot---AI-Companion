@@ -17,10 +17,9 @@ protocol LLMDirectorDelegate: AnyObject {
 
 class LLMDirector {
     
-    private let systemPrompt = "Your name is Ashe, an AI Companion. You have an outgoing personality. No Emojis. Response limited to 200 words max"
+    private let systemPrompt = "Your name is Ashe, an AI Companion. You have an outgoing personality. No Emojis. Response limited to 200 words max. Don't keep mentioning that you are an AI companion"
     private let kuzco = Kuzco.shared
     private let sanitizer: StringSanitizer
-    private let minTokens = 20
     private var model: LlamaInstance?
     weak var delegate: LLMDirectorDelegate?
     
@@ -40,11 +39,12 @@ class LLMDirector {
         )
                 
         Task {
-            let (_, result) = await Kuzco.loadModelSafely(
+            let (instance, result) = await Kuzco.loadModelSafely(
                 profile: profile,
                 settings: .performanceFocused,
                 predictionConfig: .creative
             )
+            let _ = await instance?.generate(dialogue: [Turn(role: .user, text: "Hello")])
             Task { @MainActor in
                 switch result {
                 case .success(let loadedInstance):
@@ -66,7 +66,6 @@ class LLMDirector {
         let turns = [Turn(role: .user, text: prompt)]
                 
         var response = ""
-        var tokenCounter = 0
         
         task?.cancel()
         task = Task {
@@ -77,9 +76,8 @@ class LLMDirector {
                 )
                 for try await chunk in predictionStream {
                     guard !Task.isCancelled else { return }
-                    tokenCounter += 1
                     response += chunk
-                    if tokenCounter >= minTokens {
+                    if isPunctuation(chunk) {
                         var sentences = generateSentences(text: response)
                         if sentences.count > 1 {
                             response = sentences.removeLast() + " "
@@ -87,10 +85,9 @@ class LLMDirector {
                             response = ""
                         }
                         delegate?.sentencesFormed(sentences)
-                        tokenCounter = 0
                     }
                 }
-                delegate?.sentencesFormed([response])
+                delegate?.sentencesFormed([response.trimmingCharacters(in: .whitespacesAndNewlines)])
                 Task { @MainActor in
                     delegate?.generationFinished()
                 }
@@ -100,6 +97,13 @@ class LLMDirector {
                 }
             }
         }
+    }
+    
+    func isPunctuation(_ token: String) -> Bool {
+        let punctuations: Set<Character> = [".", "!", "?"]
+        let trimmed = token.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmed.isEmpty &&
+               trimmed.allSatisfy { punctuations.contains($0) }
     }
     
     func stop() {
@@ -116,10 +120,12 @@ class LLMDirector {
         tokenizer.string = sanitizedText
         
         tokenizer.enumerateTokens(in: sanitizedText.startIndex..<sanitizedText.endIndex) { range, _ in
-            let sentence = String(sanitizedText[range])
-            let sanitizedSentence = sanitizer.postSanitize(sentence)
-            if !sanitizedSentence.isEmpty {
-                results.append(sanitizedSentence)
+            var sentence = String(sanitizedText[range])
+            if sentence.rangeOfCharacter(from: .decimalDigits) != nil {
+                sentence = sanitizer.postSanitize(sentence)
+            }
+            if !sentence.isEmpty {
+                results.append(sentence)
             }
             return true
         }

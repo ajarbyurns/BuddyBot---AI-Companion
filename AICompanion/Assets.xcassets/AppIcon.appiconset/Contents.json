@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "Thumbnail-16x16.png",
+      "filename" : "AppIconRounded-16x16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "Thumbnail-32x32 1.png",
+      "filename" : "AppIconRounded-32x32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "Thumbnail-32x32.png",
+      "filename" : "AppIconRounded-32x32 1.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "Thumbnail-64x64.png",
+      "filename" : "AppIconRounded-64x64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "Thumbnail-128x128.png",
+      "filename" : "AppIconRounded-128x128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "Thumbnail-256x256 1.png",
+      "filename" : "AppIconRounded-256x256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "Thumbnail-256x256.png",
+      "filename" : "AppIconRounded-256x256 1.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "Thumbnail-512x512 1.png",
+      "filename" : "AppIconRounded-512x512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "Thumbnail-512x512.png",
+      "filename" : "AppIconRounded-512x512 1.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "Thumbnail-1024x1024.png",
+      "filename" : "AppIconRounded-1024x1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

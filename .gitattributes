@@ -1,3 +1,4 @@
 AICompanion/ML[[:space:]]Models/* filter=lfs diff=lfs merge=lfs -text
 AICompanion/ML[[:space:]]Models/Kokoro[[:space:]]TTS[[:space:]]Model/model.onnx filter=lfs diff=lfs merge=lfs -text
 *.gguf filter=lfs diff=lfs merge=lfs -text
+AICompanion/ML[[:space:]]Models/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf filter=lfs diff=lfs merge=lfs -text

@@ -2,7 +2,7 @@
 //  SherpaTTS.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 09/08/25.
+//  Created by Ajarbyurns on 09/08/25.
 //
 import Foundation
 

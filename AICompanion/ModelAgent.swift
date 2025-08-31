@@ -2,18 +2,19 @@
 //  ModelAgent.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 06/08/25.
+//  Created by Ajarbyurns on 06/08/25.
 //
 import RealityKit
 import SwiftUI
+import SwiftData
 
 @MainActor
 class ModelAgent: ObservableObject {
-    
+        
     private var behaviourDirector: BehaviourDirector?
     private var listenerDirector: ListenerDirector?
     private var llmDirector: LLMDirector?
-    
+        
     private var sentenceCoordinator: DataCoordinator<String> = DataCoordinator()
     
     @Published var isLoading: Bool = false
@@ -21,6 +22,12 @@ class ModelAgent: ObservableObject {
     
     @Published var ttsFinishedLoading = false
     @Published var llmFinishedLoading = false
+    
+    func setChatContext(chatContext: ModelContext) {
+        self.llmDirector = .init(sanitizer: StringSanitizer(),
+                                 chatContext: chatContext)
+        self.llmDirector?.delegate = self
+    }
     
     func setEntity(_ entity: ModelEntity) {
         self.behaviourDirector = BehaviourDirector(
@@ -36,10 +43,8 @@ class ModelAgent: ObservableObject {
                           audio: .init()),
             emotions: .init())
         self.listenerDirector = .init()
-        self.llmDirector = .init(sanitizer: StringSanitizer())
         self.behaviourDirector?.delegate = self
         self.listenerDirector?.delegate = self
-        self.llmDirector?.delegate = self
         self.behaviourDirector?.startStateBehaviour()
         //self.behaviourDirector?.testAllSkeletalAnimations()
         //self.behaviourDirector?.testAllEyesAnimations()
@@ -49,6 +54,9 @@ class ModelAgent: ObservableObject {
     
     func receiveText(input: String) {
         isLoading = true
+        #if os(iOS)
+        UIApplication.shared.isIdleTimerDisabled = true
+        #endif
         sentenceCoordinator = DataCoordinator()
         behaviourDirector?.startTalking(sentenceCoordinator: sentenceCoordinator)
         llmDirector?.generate(prompt: input)
@@ -63,6 +71,9 @@ class ModelAgent: ObservableObject {
     }
     
     func stop() {
+        #if os(iOS)
+        UIApplication.shared.isIdleTimerDisabled = false
+        #endif
         llmDirector?.stop()
         listenerDirector?.stopListening()
         behaviourDirector?.stopTalking()
@@ -83,8 +94,11 @@ class ModelAgent: ObservableObject {
 extension ModelAgent: @preconcurrency BehaviourDirectorDelegate {
     
     func finishLoading() {
-        DispatchQueue.main.async { [weak self] in
-            self?.isLoading = false
+        Task { @MainActor in
+            #if os(iOS)
+            UIApplication.shared.isIdleTimerDisabled = false
+            #endif
+            self.isLoading = false
         }
     }
     
@@ -103,6 +117,7 @@ extension ModelAgent: @preconcurrency ListenerDirectorDelegate {
 }
 
 extension ModelAgent: @preconcurrency LLMDirectorDelegate {
+    
     func didFinishLoadingModel() {
         self.llmFinishedLoading = true
     }

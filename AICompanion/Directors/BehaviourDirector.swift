@@ -1,8 +1,8 @@
 //
 //  PetBehaviourState.swift
-//  AICompanion
+//  BuddyBot
 //
-//  Created by Barry Juans on 07/08/25.
+//  Created by Ajarbyurns on 07/08/25.
 //
 
 import Foundation
@@ -106,7 +106,7 @@ final class BehaviourDirector {
     func thinking() {
         currentTask = Task {
             guard !Task.isCancelled else { return }
-            await animationsDirector.playActionWithDuration(s: .thinking, time: 5.0)
+            await animationsDirector.playActionWithDuration(s: .thinking, time: 3.5)
             guard !Task.isCancelled else { return }
             await animationsDirector.playActionWithDuration(s: .idle, time: 3.0)
             guard !Task.isCancelled else { return }

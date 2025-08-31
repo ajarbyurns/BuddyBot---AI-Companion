@@ -1,8 +1,8 @@
 //
 //  ListenerDirector.swift
-//  AICompanion
+//  BuddyBot
 //
-//  Created by Barry Juans on 17/08/25.
+//  Created by Ajarbyurns on 17/08/25.
 //
 import Foundation
 import AVFoundation
@@ -69,13 +69,18 @@ class ListenerDirector {
     }
     
     func startListening() {
+        
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest?.shouldReportPartialResults = true
         
         guard let audioEngine, let recognitionRequest else {
-            delegate?.errorMessage("Audio Engine or Recognition Request is nil")
+            delegate?.errorMessage("Audio Engine not found.")
             return
         }
+        
+        #if !os(macOS)
+        setupAudioSessionForRecording()
+        #endif
         
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
@@ -89,11 +94,12 @@ class ListenerDirector {
         do {
             try audioEngine.start()
         } catch {
-            delegate?.errorMessage("Audio Engine won't start")
+            delegate?.errorMessage("Audio Engine won't start.")
             return
         }
         
         inputComplete = false
+        recognitionTask?.cancel()
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self, !Task.isCancelled, error == nil else { return }
             if let result {
@@ -112,16 +118,28 @@ class ListenerDirector {
         }
     }
     
+    #if !os(macOS)
+    private func setupAudioSessionForRecording() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.record, mode: .default, options: .duckOthers)
+        } catch {
+            delegate?.errorMessage("Can't activate Audio Session.")
+        }
+    }
+    #endif
+    
     @objc private func didFinishTalking() {
         if !inputComplete {
             Task { @MainActor in
-                self.stopListening()
+                stopListening()
                 self.delegate?.didDetectSentence(transcription)
             }
         }
     }
     
     func stopListening() {
+        
         inputComplete = true
         
         timer?.invalidate()
@@ -132,7 +150,7 @@ class ListenerDirector {
         
         recognitionTask?.cancel()
         recognitionTask = nil
-
+        
         if let audioEngine, audioEngine.isRunning {
             audioEngine.stop()
             audioEngine.inputNode.removeTap(onBus: 0)

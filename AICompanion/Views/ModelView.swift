@@ -2,7 +2,7 @@
 //  ModelView.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 06/08/25.
+//  Created by Ajarbyurns on 06/08/25.
 //
 import SwiftUI
 import RealityKit
@@ -25,6 +25,8 @@ struct ModelView: View {
 
                 VStack {
                     ProgressView()
+                        .scaleEffect(progressBarScale, anchor: .center)
+                        .tint(Color("TextAccentColor"))
                         .padding()
                         .cornerRadius(10)
                 }
@@ -37,7 +39,7 @@ struct ModelView: View {
         
         let anchor = AnchorEntity(world: .zero)
         
-        entity.position = SIMD3<Float>(x: 0, y: -1.2, z: 1.0)
+        entity.position = SIMD3<Float>(x: 0.05, y: -1.2, z: 1.0)
         anchor.addChild(entity)
         
         let light = PointLight()

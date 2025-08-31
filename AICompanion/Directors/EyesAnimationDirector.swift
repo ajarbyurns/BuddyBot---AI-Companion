@@ -2,7 +2,7 @@
 //  EyesAnimationDirector.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 14/08/25.
+//  Created by Ajarbyurns on 14/08/25.
 //
 /***
  BlendShapes:

@@ -2,7 +2,7 @@
 //  DataCoordinator.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 10/08/25.
+//  Created by Ajarbyurns on 10/08/25.
 //
 import Foundation
 

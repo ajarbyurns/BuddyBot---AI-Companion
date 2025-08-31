@@ -1,8 +1,8 @@
 //
 //  AudioPlayer.swift
-//  AICompanion
+//  BuddyBot
 //
-//  Created by Barry Juans on 09/08/25.
+//  Created by Ajarbyurns on 09/08/25.
 //
 import AVFoundation
 
@@ -44,12 +44,27 @@ class AudioDirector {
             return
         }
         
+        #if !os(macOS)
+        setupAudioSession()
+        #endif
+        
         do {
             try audioEngine.start()
         } catch {
-            delegate?.foundError("Error starting audio engine: \(error.localizedDescription)")
+            delegate?.foundError("Error when starting audio engine: \(error.localizedDescription)")
         }
     }
+    
+    #if !os(macOS)
+    private func setupAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: .duckOthers)
+        } catch {
+            delegate?.foundError("Can't activate AV Audio Session.")
+        }
+    }
+    #endif
     
     func waitAndPlayAudio(_ coordinator: DataCoordinator<(String, [Float])>) {
         playAudioTask?.cancel()
@@ -89,7 +104,7 @@ class AudioDirector {
             }
         } else {
             Task { @MainActor in
-                delegate?.foundError("Failed to access pcm buffer data.")
+                delegate?.foundError("Failed to access PCM buffer data.")
             }
             return nil
         }
@@ -134,6 +149,7 @@ class AudioDirector {
 
     func stop() {
         playAudioTask?.cancel()
+        
         if playerNode.isPlaying {
             self.playerNode.stop()
         }

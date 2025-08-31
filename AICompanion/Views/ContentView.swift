@@ -2,37 +2,49 @@
 //  ContentView.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 06/08/25.
+//  Created by Ajarbyurns on 06/08/25.
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     
-    @StateObject var agent = ModelAgent()
+    @Environment(\.modelContext) private var chatContext
+    @ObservedObject var agent: ModelAgent
+    @FocusState private var isEditing: Bool
     
     var body: some View {
         ZStack {
             ModelView(agent: agent)
+                .edgesIgnoringSafeArea(.all)
+                .onTapGesture {
+                    isEditing = false
+                }
             VStack {
                 HStack {
                     if agent.isLoading {
                         ProgressView()
+                            .scaleEffect(progressBarScale, anchor: .center)
+                            .tint(Color("TextAccentColor"))
                             .padding()
                     }
                     if !agent.errorMessage.isEmpty {
                         Text(agent.errorMessage)
                             .fontWeight(.bold)
                             .fontDesign(.rounded)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(Color("TextAccentColor"))
                             .padding()
                     }
                     Spacer()
                 }
                 Spacer()
-                ChatView(agent: agent)
+                ChatView(isEditing: $isEditing, agent: agent)
             }
         }
-        .background(.white)
+        .background(Color("AccentColor"))
+        .onAppear {
+            agent.setChatContext(chatContext: chatContext)
+        }
     }
 }

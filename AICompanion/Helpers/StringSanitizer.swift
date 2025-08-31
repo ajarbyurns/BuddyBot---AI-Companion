@@ -2,7 +2,7 @@
 //  StringSanitizer.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 16/08/25.
+//  Created by Ajarbyurns on 16/08/25.
 //
 import Foundation
 import NaturalLanguage

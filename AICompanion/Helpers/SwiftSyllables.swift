@@ -2,7 +2,7 @@
 //  SwiftSyllables.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 13/08/25.
+//  Created by Ajarbyurns on 13/08/25.
 //
 
 

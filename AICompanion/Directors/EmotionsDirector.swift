@@ -2,7 +2,7 @@
 //  SentimentsDirector.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 11/08/25.
+//  Created by Ajarbyurns on 11/08/25.
 //
 import CoreML
 

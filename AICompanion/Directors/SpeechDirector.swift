@@ -1,8 +1,8 @@
 //
 //  SpeechDirector.swift
-//  AICompanion
+//  BuddyBot
 //
-//  Created by Barry Juans on 07/08/25.
+//  Created by Ajarbyurns on 07/08/25.
 //
 import AVFoundation
 import NaturalLanguage
@@ -79,7 +79,7 @@ class SpeechDirector: NSObject {
             
             Task {
                 guard let tts = ttsDirector.tts else {
-                    print("Text to Speech Model is nil")
+                    print("Text to Speech Model is not found.")
                     let _ = Unmanaged<SpeechDirector>.fromOpaque(arg).takeUnretainedValue()
                     continuation.resume()
                     return
@@ -100,12 +100,12 @@ class SpeechDirector: NSObject {
         let callback = TtsCallbackWithArg { samplesPtr, nSamples, argPtr in
             
             guard let argPtr else {
-                print("Callback received nil argPtr")
+                print("Error when generating audio")
                 return 0
             }
             
             guard let samplesPtr else {
-                print("Callback received nil samplesPtr")
+                print("Error when generating audio buffer")
                 return 0
             }
             

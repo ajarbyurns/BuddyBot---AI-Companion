@@ -2,17 +2,19 @@
 //  AICompanionApp.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 06/08/25.
+//  Created by Ajarbyurns on 06/08/25.
 //
 
 import SwiftUI
 
 @main
 struct AICompanionApp: App {
+    @StateObject var agent = ModelAgent()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(.light)
+            ContentView(agent: agent)
         }
+        .modelContainer(for: DialogueTurn.self)
     }
 }

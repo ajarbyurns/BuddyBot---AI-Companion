@@ -2,7 +2,7 @@
 //  ChatView.swift
 //  AICompanion
 //
-//  Created by Barry Juans on 06/08/25.
+//  Created by Ajarbyurns on 06/08/25.
 //
 import SwiftUI
 #if os(macOS)
@@ -21,8 +21,7 @@ struct ChatView: View {
     @State private var mode: ChatMode = .text
     @State private var text: String = ""
     @State private var pulse = false
-    @FocusState private var isEditing: Bool
-    @State private var textHeight: CGFloat = 50
+    @FocusState.Binding var isEditing: Bool
     
     @ObservedObject var agent: ModelAgent
     
@@ -30,28 +29,14 @@ struct ChatView: View {
         if agent.llmFinishedLoading && agent.ttsFinishedLoading {
             if mode == .text {
                 VStack {
-                    ZStack(alignment: .topLeading) {
-                        if text.isEmpty && !isEditing {
-                            Text("Type your message...")
-                                .foregroundColor(.gray)
-                                .font(.title2)
-                                .padding(.top)
-                                .padding(.leading, 5)
-                        }
-                        
-                        TextEditor(text: $text)
-                            .focused($isEditing)
-                            .foregroundColor(.black)
-                            .font(.title2)
-                            .accentColor(.black)
-                            .padding(.top)
-                            .padding(.leading, 5)
-                    }
-                    .frame(height: textHeight)
-                    .padding(.horizontal, 10)
-                    .onChange(of: text, { _, _ in
-                        recalcHeight()
-                    })
+                    TextField("Type your message...", text: $text, axis: .vertical)
+                        .lineLimit(5)
+                        .textFieldStyle(.plain)
+                        .focused($isEditing)
+                        .accentColor(Color("TextAccentColor"))
+                        .foregroundColor(Color("TextAccentColor"))
+                        .font(textEditorFont)
+                        .padding(paddingSize)
                     
                     HStack(alignment: .bottom) {
                         
@@ -73,6 +58,7 @@ struct ChatView: View {
                         Spacer()
                         
                         Button(action: {
+                            isEditing = false
                             if agent.isLoading {
                                 agent.stop()
                             } else if text.isEmpty {
@@ -80,13 +66,13 @@ struct ChatView: View {
                                     mode = .audio
                                 }
                             } else {
-                                agent.receiveText(input: text) //test
+                                agent.receiveText(input: text)
                                 text = ""
                             }
                         }, label: {
                             Image(systemName: agent.isLoading ? "stop.circle.fill" : text.isEmpty ? "mic.circle.fill" : "arrow.up.circle.fill")
-                                .foregroundStyle(.black)
-                                .font(.largeTitle)
+                                .foregroundStyle(Color("TextAccentColor"))
+                                .font(buttonSize)
                         })
                         .buttonStyle(.plain)
                         .background(.clear)
@@ -96,10 +82,10 @@ struct ChatView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(.thinMaterial)
+                        .fill(.regularMaterial)
                 )
-                .padding(.horizontal)
-                .padding(.bottom)
+                .padding(.horizontal, paddingSize)
+                .padding(.bottom, paddingSize)
             } else {
                 VStack {
                     Button(action: {
@@ -150,7 +136,7 @@ struct ChatView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.1)
                     .frame(maxWidth: .infinity, maxHeight: 80)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(Color("TextAccentColor"))
                     .opacity(pulse ? 0.7 : 1.0)
                     .animation(
                         .easeInOut(duration: 0.8)
@@ -167,31 +153,5 @@ struct ChatView: View {
             .padding(.horizontal)
             .padding(.bottom, 40)
         }
-    }
-    
-    func recalcHeight() {
-        #if os(macOS)
-        let size = CGSize(width: (NSScreen.main?.frame.width ?? 300) - 100, height: .infinity)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 17)
-        ]
-        let boundingBox = text.boundingRect(with: size,
-                                            options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                            attributes: attributes,
-                                            context: nil)
-        textHeight = min(max(50, boundingBox.height + 20), 300)
-        #else
-        let screenWidth = UIScreen.main.bounds.width
-        let size = CGSize(width: screenWidth - 100, height: CGFloat.greatestFiniteMagnitude)
-
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 17)
-        ]
-        let boundingBox = text.boundingRect(with: size,
-                                            options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                            attributes: attributes,
-                                            context: nil)
-        textHeight = min(max(50, boundingBox.height + 20), 300)
-        #endif
     }
 }

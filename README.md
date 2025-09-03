@@ -9,7 +9,7 @@ The app uses:
 4. Self made Emotion Classifier MLModel
 5. [SyllableCounter](https://github.com/wfreitag/syllable-counter-swift)
 6. [VRoid model (exported to .usdz)](https://hub.vroid.com/en/characters/7939147878897061040/models/2292219474373673889)
-7. [Kuzco](https://github.com/arkavo-org/Kuzco) [Going to be converted to CoreML soon]
+7. [Kuzco](https://github.com/Commencement-Technology/Kuzco) [Going to be converted to CoreML soon]
 8. Apple's Speech Recognition
 9. Apple's Natural Language
 10. Apple's RealityKit
